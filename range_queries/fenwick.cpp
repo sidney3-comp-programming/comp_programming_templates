@@ -1,6 +1,7 @@
 #include <vector>
+#include <concepts>
 
-template<typename T>
+template<std::floating_point T>
 class Fenwick
 {
 public:

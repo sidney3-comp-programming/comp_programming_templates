@@ -1,25 +1,31 @@
 #include <vector>
+#include <cassert>
+#include <concepts>
 
-template<typename T>
-class MRQ
+template<std::floating_point T, typename Callable>
+class RMQ
 {
 public:
-    MRQ(const std::vector<T>& base_arr):
-        baseArrSize(base_arr.size()), Tree(4 * base_arr.size())
+    RMQ(const std::vector<T>& base_arr, const Callable& comparator):
+        baseArrSize(base_arr.size()), Tree(4 * base_arr.size()), comparator(comparator)
     {
         __build(base_arr, 1, 0, baseArrSize - 1);
     }
     T query(int l, int r)
     {
+        assert(l <= r);
+        assert(r < baseArrSize);
         return __query(1, 0, baseArrSize - 1, l, r);
     }
     void update(int i, int new_val)
     {
+        assert(i < baseArrSize);
         __update(1, 0, baseArrSize - 1, i, new_val);
     }
 private:
     int baseArrSize;
     std::vector<T> Tree;
+    Callable comparator;
     void __build(const std::vector<T>& base_arr, int v, int tl, int tr)
     {
         if(tl == tr)
@@ -30,7 +36,7 @@ private:
         int tm = (tl + tr)/2;
         __build(base_arr, 2*v, tl, tm);
         __build(base_arr, 2*v+1, tm+1, tr);
-        Tree[v] = std::max(Tree[2*v], Tree[2*v+1]);
+        Tree[v] = (comparator(Tree[2*v], Tree[2*v+1])) ? Tree[2*v] : Tree[2*v + 1];
     }
     T __query(int v, int tl, int tr, int l, int r)
     {
@@ -43,7 +49,9 @@ private:
             return 0;
         }
         int tm = (tl+tr)/2;
-        return std::max(__query(2*v, tl, tm, l, std::min(r, tm)), __query(2*v+1, tm+1, tr, std::max(l, tm+1), r));
+        T l_child_response = __query(2*v, tl, tm, l, std::min(r, tm));
+        T r_child_response = __query(2*v+1, tm+1, tr, std::max(l, tm+1), r);
+        return (comparator(l_child_response, r_child_response)) ? l_child_response : r_child_response;
     }
     void __update(int v, int tl, int tr, int i, int new_val)
     {
@@ -61,7 +69,6 @@ private:
         {
             __update(2*v+1, tm+1, tr, i, new_val);
         }
-        Tree[v] = max(Tree[2*v], Tree[2*v+1]);
+        Tree[v] = (comparator(Tree[2*v], Tree[2*v+1])) ? Tree[2*v] : Tree[2*v + 1];
     }
-
 };

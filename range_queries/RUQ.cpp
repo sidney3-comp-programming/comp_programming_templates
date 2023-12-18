@@ -1,5 +1,6 @@
 #include <vector>
-template<typename T>
+#include <concepts>
+template<std::floating_point T>
 class RUQ
 {
 public:
@@ -18,7 +19,7 @@ public:
     }
 
 private:
-    int base_arr_sz;
+    const int base_arr_sz;
     std::vector<T> Tree;
     void __build(const std::vector<T>& base_arr, int v, int tl, int tr)
     {
