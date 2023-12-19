@@ -1,6 +1,6 @@
 #include <vector>
 #include <concepts>
-template<std::floating_point T>
+template<typename T>
 class RUQ
 {
 public:

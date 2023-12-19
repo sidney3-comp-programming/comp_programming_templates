@@ -2,12 +2,12 @@
 #include <cassert>
 #include <concepts>
 
-template<std::floating_point T, typename Callable>
+template<typename T, typename Callable>
 class RMQ
 {
 public:
-    RMQ(const std::vector<T>& base_arr, const Callable& comparator):
-        baseArrSize(base_arr.size()), Tree(4 * base_arr.size()), comparator(comparator)
+    RMQ(const std::vector<T>& base_arr):
+        baseArrSize(base_arr.size()), Tree(4 * base_arr.size()), comparator(Callable())
     {
         __build(base_arr, 1, 0, baseArrSize - 1);
     }

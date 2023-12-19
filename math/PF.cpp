@@ -1,6 +1,7 @@
 #include <unordered_map>
 #include <vector>
 #include <math/make_primes.cpp>
+#define Hey "Hello"
 
 std::unordered_map<int, int> PF(int x)
 {
