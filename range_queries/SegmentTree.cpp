@@ -79,11 +79,11 @@ private:
             }
             else if(l <= new_r)
             {
-                return __query(2*v+1, tm+1, tr, new_l, r);
+                return __query(2*v, tl, tm, l, new_r);
             }
             else if(new_l <= r)
             {
-                return __query(2*v, tl, tm, l, new_r);
+                return __query(2*v+1, tm+1, tr, new_l, r);
             }
             else
             {
